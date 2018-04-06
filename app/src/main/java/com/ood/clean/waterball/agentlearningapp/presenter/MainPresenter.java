@@ -3,16 +3,17 @@ package com.ood.clean.waterball.agentlearningapp.presenter;
 import android.util.Log;
 
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
-import com.ood.clean.waterball.agentlearningapp.modles.repositories.StubUserReository;
-import com.ood.clean.waterball.agentlearningapp.modles.repositories.UserReository;
+import com.ood.clean.waterball.agentlearningapp.modles.repositories.UserRepository;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignInModel;
 import com.ood.clean.waterball.agentlearningapp.views.base.MainView;
 
 public class MainPresenter {
     private final static String TAG = "MainPresenter";
+    private UserRepository userRepository;
     private MainView mainView;
 
-    public MainPresenter(){
+    public MainPresenter(UserRepository userRepository){
+        this.userRepository = userRepository;
     }
 
     public void setMainView(MainView mainView) {
@@ -21,8 +22,10 @@ public class MainPresenter {
 
     public void signIn(SignInModel signInModel) {
         Log.d(TAG, "signIn");
-        UserReository userReository = new StubUserReository();
-        User user = userReository.signIn(signInModel);
-        mainView.onSignInSuccessful(user);
+        User user = userRepository.signIn(signInModel);
+        if (user == null)
+            mainView.onSignInFailed();
+        else
+            mainView.onSignInSuccessfully(user);
     }
 }
