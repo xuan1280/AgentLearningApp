@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StubUserReository implements UserRepository {
-    private final static String TAG = "StubUserReository";
+public class StubUserRepository implements UserRepository {
+    private final static String TAG = "StubUserRepository";
     private Map<String, User> usersMap = new HashMap<>();
 
-    public StubUserReository() {
+    public StubUserRepository() {
         createUsers();
     }
 
