@@ -29,10 +29,10 @@
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
-        android:padding="4dp"
         android:background="@drawable/corner"
         android:gravity="center"
         android:hint="@string/account"
+        android:padding="4dp"
         android:textSize="20sp" />
 
     <EditText
@@ -40,10 +40,10 @@
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
-        android:padding="4dp"
         android:background="@drawable/corner"
         android:gravity="center"
         android:hint="@string/password"
+        android:padding="4dp"
         android:textSize="20sp" />
 
     <LinearLayout
@@ -55,30 +55,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00000000"
-            android:text="@string/forgotPassword"
-            android:onClick="onForgotPasswordBtnClick"/>
+            android:onClick="onForgotPasswordBtnClick"
+            android:text="@string/forgotPassword" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/verticalBar"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/createAccountBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00000000"
-            android:text="@string/createAccount"
-            android:onClick="onCreateAccountBtnClick"/>
+            android:onClick="onCreateAccountBtnClick"
+            android:text="@string/createAccount" />
     </LinearLayout>
 
     <Button
         android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:onClick="onLoginBtnClick"/>
+        android:onClick="onLoginBtnClick"
+        android:text="@string/login" />
 
 
 </LinearLayout>

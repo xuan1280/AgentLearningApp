@@ -10,4 +10,5 @@
     <string name="forgotPassword">忘記密碼</string>
     <string name="createAccount">註冊帳號</string>
     <string name="verticalBar">|</string>
+    <string name="accountOrPasswordNotCorrect">帳號或密碼錯誤</string>
 </resources>
