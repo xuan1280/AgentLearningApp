@@ -3,4 +3,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="earNews">耳邊消息</string>
+    <string name="login">登入</string>
+    <string name="password">密碼</string>
+    <string name="account">帳號</string>
+    <string name="forgotPassword">忘記密碼</string>
+    <string name="createAccount">註冊帳號</string>
+    <string name="verticalBar">|</string>
 </resources>

@@ -1,15 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ood.clean.waterball.agentlearningapp.MainActivity">
+    android:background="#daffab87"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.ood.clean.waterball.agentlearningapp.views.activity.MainActivity">
 
-    <FrameLayout
+    <TextView
+        android:id="@+id/appNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/container">
-    </FrameLayout>
+        android:layout_margin="3dp"
+        android:text="@string/earNews"
+        android:textSize="30sp" />
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/appInstructionTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:text="將您需要的消息送到您耳邊" />
+
+    <EditText
+        android:id="@+id/accountEd"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:padding="4dp"
+        android:background="@drawable/corner"
+        android:gravity="center"
+        android:hint="@string/account"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/passwordEd"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:padding="4dp"
+        android:background="@drawable/corner"
+        android:gravity="center"
+        android:hint="@string/password"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/forgotPasswordBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:text="@string/forgotPassword"
+            android:onClick="onForgotPasswordBtnClick"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/verticalBar"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/createAccountBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:text="@string/createAccount"
+            android:onClick="onCreateAccountBtnClick"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:onClick="onLoginBtnClick"/>
+
+
+</LinearLayout>
