@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @BindView(R.id.accountEd) EditText accountEd;
     @BindView(R.id.passwordEd) EditText passwordEd;
     private MainPresenter mainPresenter;
-    private UserRepository userRepository = new StubUserReository();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         ButterKnife.bind(this);
         mainPresenter = new MainPresenter();
         mainPresenter.setMainView(this);
-        mainPresenter.setUserRepository(userRepository);
+        mainPresenter.setUserRepository(new StubUserReository());
     }
 
     public void onLoginBtnClick(View view) {
