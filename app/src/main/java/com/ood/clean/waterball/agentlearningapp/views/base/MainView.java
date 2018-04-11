@@ -5,5 +5,6 @@ import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
 
 public interface MainView {
     void onSignInSuccessfully(User user);
-    void onSignInFailed();
+    void onAccountNoFound();
+    void onPasswordNotCorrect();
 }

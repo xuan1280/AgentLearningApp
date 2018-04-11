@@ -5,6 +5,12 @@ public class ResponseModel<T> {
     private String message;
     private T data;
 
+    public ResponseModel(int code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
+
     public void setCode(int code) {
         this.code = code;
     }

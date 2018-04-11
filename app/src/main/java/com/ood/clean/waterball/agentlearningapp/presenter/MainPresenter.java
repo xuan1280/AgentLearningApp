@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
 import com.ood.clean.waterball.agentlearningapp.modles.repositories.UserRepository;
+import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.ResponseModel;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignInModel;
 import com.ood.clean.waterball.agentlearningapp.views.base.MainView;
 
@@ -28,11 +29,13 @@ public class MainPresenter {
         new Thread(){
             @Override
             public void run() {
-                User user = userRepository.signIn(signInModel);
-                if (user == null)
-                    handler.post(()-> mainView.onSignInFailed());
+                ResponseModel<User> responseModel = userRepository.signIn(signInModel);
+                if (responseModel.getCode() == 404001)
+                    handler.post(()-> mainView.onAccountNoFound());
+                else if (responseModel.getCode() == 404002)
+                    handler.post(()-> mainView.onPasswordNotCorrect());
                 else
-                    handler.post(()-> mainView.onSignInSuccessfully(user));
+                    handler.post(()-> mainView.onSignInSuccessfully(responseModel.getData()));
             }
         }.start();
     }

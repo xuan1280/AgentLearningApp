@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ood.clean.waterball.agentlearningapp.modles.entities.City;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
+import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.ResponseModel;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignInModel;
 
 import java.util.ArrayList;
@@ -28,12 +29,14 @@ public class StubUserRepository implements UserRepository {
     }
 
     @Override
-    public User signIn(SignInModel signInModel) {
+    public ResponseModel<User> signIn(SignInModel signInModel) {
         Log.d(TAG, "signIn");
         User user = usersMap.get(signInModel.getAccount());
+        if (user == null)
+            return new ResponseModel<>(404001, "No matched account found.", null);
         if (user.getPassword().equals(signInModel.getPassword()))
-            return user;
-        return null;
+            return new ResponseModel<>(200, "successful.", user);
+        return new ResponseModel<>(404002, "Password wrong.", null);
     }
 
     @Override
