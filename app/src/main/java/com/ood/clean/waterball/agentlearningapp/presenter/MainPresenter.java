@@ -29,7 +29,6 @@ public class MainPresenter {
             @Override
             public void run() {
                 User user = userRepository.signIn(signInModel);
-                //TODO detect code
                 if (user == null)
                     handler.post(()-> mainView.onSignInFailed());
                 else
