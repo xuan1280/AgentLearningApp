@@ -1,29 +1,24 @@
 package com.ood.clean.waterball.agentlearningapp.views.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.ood.clean.waterball.agentlearningapp.R;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
-import com.ood.clean.waterball.agentlearningapp.modles.repositories.StubUserReository;
-import com.ood.clean.waterball.agentlearningapp.modles.repositories.UserRepository;
+import com.ood.clean.waterball.agentlearningapp.modles.repositories.StubUserRepository;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignInModel;
 import com.ood.clean.waterball.agentlearningapp.presenter.MainPresenter;
 import com.ood.clean.waterball.agentlearningapp.views.base.MainView;
 
-import java.io.Serializable;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-@SuppressLint("Registered")
+
 public class MainActivity extends AppCompatActivity implements MainView {
     private final static String TAG = "MainActivity";
     @BindView(R.id.accountEd) EditText accountEd;
@@ -35,9 +30,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        mainPresenter = new MainPresenter();
+        mainPresenter = new MainPresenter(new StubUserRepository());
         mainPresenter.setMainView(this);
-        mainPresenter.setUserRepository(new StubUserReository());
     }
 
     public void onLoginBtnClick(View view) {
@@ -64,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void onSignInFailed() {
         Log.d(TAG, "onSignInFailed");
-        new AlertDialog.Builder(this).setMessage(getString(R.string.accountOrPasswordNotCorrect)).create().show();
+        new AlertDialog.Builder(this)
+                .setMessage(getString(R.string.accountOrPasswordNotCorrect))
+                .show();
     }
 }

@@ -1,9 +1,6 @@
 package com.ood.clean.waterball.agentlearningapp.modles.entities;
 
-import java.io.Serializable;
-
-public class User implements Serializable {
-    private int id;
+public class User extends Entitiy{
     private String name;
     private int age;
     private boolean gender;
@@ -11,8 +8,7 @@ public class User implements Serializable {
     private String password;
     private City city;
 
-    public User() {
-    }
+    public User() {}
 
     public User(int id, String name, int age, boolean gender, String account, String password, City city) {
         this.id = id;
@@ -22,10 +18,6 @@ public class User implements Serializable {
         this.account = account;
         this.password = password;
         this.city = city;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setName(String name) {
@@ -50,10 +42,6 @@ public class User implements Serializable {
 
     public void setCity(City city) {
         this.city = city;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {

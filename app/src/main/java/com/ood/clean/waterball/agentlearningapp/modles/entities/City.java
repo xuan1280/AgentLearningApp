@@ -1,7 +1,6 @@
 package com.ood.clean.waterball.agentlearningapp.modles.entities;
 
-public class City {
-    private int id;
+public class City extends Entitiy{
     private String name;
 
     public City(int id, String name) {
@@ -9,16 +8,8 @@ public class City {
         this.name = name;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {

@@ -20,7 +20,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private void init() {
         user = (User) getIntent().getSerializableExtra("user");
-        Log.d(TAG, user.getName() + "sign in successfully.");
+        Log.d(TAG, user.getName() + " sign in successfully.");
     }
 
 }
