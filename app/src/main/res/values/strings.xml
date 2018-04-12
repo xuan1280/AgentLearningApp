@@ -12,4 +12,8 @@
     <string name="verticalBar">|</string>
     <string name="accountNotFound">沒有此帳號，請重新輸入!</string>
     <string name="passwordNotCorrect">輸入的密碼不正確，請重新輸入!</string>
+    <string name="title_activity_basic">BasicActivity</string>
+    <string name="activityParticipated">已參加活動</string>
+    <string name="latestNews">最新消息</string>
+    <string name="recommendedNews">推薦消息</string>
 </resources>

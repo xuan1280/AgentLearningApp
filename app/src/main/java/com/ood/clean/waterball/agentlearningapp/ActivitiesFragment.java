@@ -1,29 +1,38 @@
 package com.ood.clean.waterball.agentlearningapp;
 
 
-import android.app.Fragment;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
-public class TestFragment extends Fragment {
+public class ActivitiesFragment extends Fragment {
+    @BindView(R.id.textview) TextView textView;
+    private final static String TAG = "ActivitiesFragment";
     private final static String DATA_KEY = "d1";
     private String data;
 
-    public TestFragment(){
+    public ActivitiesFragment(){
         // Required empty public constructor
     }
 
-    public static TestFragment getInstance(String data){
-        TestFragment testFragment = new TestFragment();
+    public static ActivitiesFragment getInstance(String data){
+        Log.d(TAG, data + " getInstance");
+        ActivitiesFragment activitiesFragment = new ActivitiesFragment();
         Bundle bundle = new Bundle();
         bundle.putString(DATA_KEY, data);
-        testFragment.setArguments(bundle);
-        return testFragment;
+        activitiesFragment.setArguments(bundle);
+        return activitiesFragment;
     }
 
     @Override
@@ -36,6 +45,14 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_test, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+        Log.d(TAG, data + " view created");
+        textView.setText(data);
     }
 
     @Override
