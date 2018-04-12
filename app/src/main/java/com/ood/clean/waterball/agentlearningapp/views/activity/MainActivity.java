@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     public void onCreateAccountBtnClick(View view) {
+        Log.d(TAG, "turn to sign up activity");
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 
     public void onForgotPasswordBtnClick(View view) {
