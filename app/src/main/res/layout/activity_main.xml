@@ -32,6 +32,8 @@
         android:background="@drawable/corner"
         android:gravity="center"
         android:hint="@string/account"
+        android:inputType="text"
+        android:maxLines="1"
         android:padding="4dp"
         android:textSize="20sp" />
 
@@ -43,6 +45,8 @@
         android:background="@drawable/corner"
         android:gravity="center"
         android:hint="@string/password"
+        android:inputType="textPassword"
+        android:maxLines="1"
         android:padding="4dp"
         android:textSize="20sp" />
 

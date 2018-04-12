@@ -59,10 +59,19 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void onSignInFailed() {
-        Log.d(TAG, "onSignInFailed");
+    public void onAccountNoFound() {
+        Log.d(TAG, "onAccountNoFound");
         new AlertDialog.Builder(this)
-                .setMessage(getString(R.string.accountOrPasswordNotCorrect))
+                .setMessage(getString(R.string.accountNotFound))
                 .show();
     }
+
+    @Override
+    public void onPasswordNotCorrect() {
+        Log.d(TAG, "onPasswordNotCorrect");
+        new AlertDialog.Builder(this)
+                .setMessage(getString(R.string.passwordNotCorrect))
+                .show();
+    }
+
 }
