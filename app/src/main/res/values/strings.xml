@@ -24,5 +24,8 @@
     <string name="name">姓名</string>
     <string name="accountNotFound">沒有此帳號，請重新輸入!</string>
     <string name="passwordNotCorrect">輸入的密碼不正確，請重新輸入!</string>
+    <string name="accountDuplicatedWarning">此帳號已有人使用，請重新輸入</string>
+    <string name="pleaseEnterCorrectParameter">請輸入正確的資料格式</string>
+    <string name="okay">了解</string>
 
 </resources>

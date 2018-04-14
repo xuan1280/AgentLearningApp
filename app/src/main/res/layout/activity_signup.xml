@@ -27,9 +27,7 @@
                 android:gravity="center_horizontal"
                 android:hint="@string/account"
                 android:maxLength="20"
-                android:maxLines="1"
-
-                />
+                android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -89,6 +87,7 @@
 
 
         <RadioGroup
+            android:id="@+id/genderRG"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -101,12 +100,14 @@
                 android:textSize="18sp" />
 
             <RadioButton
+                android:id="@+id/boyRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/boy" />
 
             <RadioButton
+                android:id="@+id/girlRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -114,10 +115,9 @@
 
         </RadioGroup>
 
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -127,33 +127,20 @@
                 android:text="@string/liveCity"
                 android:textSize="18sp" />
 
-            <RadioButton
-                android:id="@+id/newTaipeiRadio"
+            <Spinner
+                android:id="@+id/citySpn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/newTaipeiCity" />
+                android:layout_gravity="center_horizontal" />
 
-            <RadioButton
-                android:id="@+id/taoYuanRadio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/taoYuanCity" />
-
-            <RadioButton
-                android:id="@+id/othersRadio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/others" />
-        </RadioGroup>
+        </LinearLayout>
 
         <Button
             android:id="@+id/signUpBtn"
             android:layout_width="wrap_content"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_marginTop="5dp"
+            android:onClick="onSignUpBtnClick"
             android:text="@string/signUp" />
 
     </LinearLayout>
