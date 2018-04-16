@@ -16,4 +16,11 @@
     <string name="activityParticipated">已參加活動</string>
     <string name="latestNews">最新消息</string>
     <string name="recommendedNews">推薦消息</string>
+
+    <string-array name="activityOptions">
+        <item>已參加活動</item>
+        <item>最新消息</item>
+        <item>推薦消息</item>
+    </string-array>
+
 </resources>

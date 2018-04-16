@@ -3,6 +3,7 @@ package com.ood.clean.waterball.agentlearningapp.views.activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
@@ -10,8 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.ood.clean.waterball.agentlearningapp.ActivitiesFragment;
 import com.ood.clean.waterball.agentlearningapp.R;
@@ -28,6 +27,7 @@ public class BaseActivity extends AppCompatActivity {
     private List<Fragment> pages;
     private User user;
     private PagerAdapter pagerAdapter;
+    private String[] options;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.pager) ViewPager viewPager;
@@ -50,34 +50,13 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void initPages() {
-        pages = new ArrayList<>();
-        pages.add(ActivitiesFragment.getInstance(getString(R.string.activityParticipated)));
-        pages.add(ActivitiesFragment.getInstance(getString(R.string.latestNews)));
-        pages.add(ActivitiesFragment.getInstance(getString(R.string.recommendedNews)));
+        options = getResources().getStringArray(R.array.activityOptions);
         viewPager.setAdapter(pagerAdapter = new MyPagerAdapter(getSupportFragmentManager()));
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setOffscreenPageLimit(options.length);
     }
 
     private void initTabs() {
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.activityParticipated)));
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.latestNews)));
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.recommendedNews)));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -87,14 +66,22 @@ public class BaseActivity extends AppCompatActivity {
         MyPagerAdapter(FragmentManager fm){
             super(fm);
         }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            super.getPageTitle(position);
+            return options[position];
+        }
+
         @Override
         public Fragment getItem(int position) {
-            return pages.get(position);
+            String option = options[position];
+            return ActivitiesFragment.getInstance(option);
         }
 
         @Override
         public int getCount() {
-            return pages.size();
+            return options.length;
         }
     }
 }
