@@ -16,9 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.activity.BaseActivity">
-        </activity>
         <activity android:name=".views.activity.SignUpActivity"/>
+
+        <activity
+            android:name=".views.activity.BaseActivity"
+            android:label="@string/title_activity_basic"
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

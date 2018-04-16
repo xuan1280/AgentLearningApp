@@ -15,9 +15,6 @@
     <string name="girl">女</string>
     <string name="gender">性別:</string>
     <string name="liveCity">居住城市:</string>
-    <string name="newTaipeiCity">新北市</string>
-    <string name="taoYuanCity">桃園市</string>
-    <string name="others">其他</string>
     <string name="confirm">確認</string>
     <string name="signUp">註冊</string>
     <string name="age">年齡</string>
@@ -25,7 +22,10 @@
     <string name="accountNotFound">沒有此帳號，請重新輸入!</string>
     <string name="passwordNotCorrect">輸入的密碼不正確，請重新輸入!</string>
     <string name="accountDuplicatedWarning">此帳號已有人使用，請重新輸入</string>
-    <string name="pleaseEnterCorrectParameter">請輸入正確的資料格式</string>
+    <string name="pleaseEnterCorrectParameter">請輸入正確的資料</string>
     <string name="okay">了解</string>
-
+    <string name="title_activity_basic">BasicActivity</string>
+    <string name="activityParticipated">已參加活動</string>
+    <string name="latestNews">最新消息</string>
+    <string name="recommendedNews">推薦消息</string>
 </resources>
