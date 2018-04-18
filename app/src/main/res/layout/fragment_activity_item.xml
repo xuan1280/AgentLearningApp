@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="巴赫納莉亞台灣室內樂團<2018巴赫納莉亞台參 春季音樂...>"
+            android:text="test"
             android:textColor="#39a430"
             android:padding="3dp"
             android:textSize="20sp" />
