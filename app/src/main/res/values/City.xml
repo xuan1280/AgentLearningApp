@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="citySelected">選擇城市</string>
+    <string name="newTaipeiCity">新北市</string>
+    <string name="taoYuanCity">桃園市</string>
+    <string name="TaipeiCity">台北市</string>
+    <string name="others">其他</string>
+
+    <array name="cities">
+        <item>@string/citySelected</item>
+        <item>@string/newTaipeiCity</item>
+        <item>@string/taoYuanCity</item>
+        <item>@string/TaipeiCity</item>
+        <item>@string/others</item>
+    </array>
+
+</resources>
