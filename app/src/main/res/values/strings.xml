@@ -16,6 +16,11 @@
     <string name="activityParticipated">已參加活動</string>
     <string name="latestNews">最新消息</string>
     <string name="recommendedNews">推薦消息</string>
+    <string name="openDrawer">開啟</string>
+    <string name="closeDrawer">關閉</string>
+    <string name="about">關於</string>
+    <string name="logout">登出</string>
+
 
     <string-array name="activityOptions">
         <item>已參加活動</item>
