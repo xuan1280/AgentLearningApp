@@ -7,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -22,6 +22,7 @@ import com.ood.clean.waterball.agentlearningapp.ActivitiesFragment;
 import com.ood.clean.waterball.agentlearningapp.R;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,9 +30,8 @@ import butterknife.ButterKnife;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final static String TAG = "BaseActivity";
-    private List<Fragment> pages;
+    private List<Fragment> fragments = new ArrayList<>();
     private User user;
-    private PagerAdapter pagerAdapter;
     private String[] options;
     @BindView(R.id.navigationView) NavigationView navigationView;
     @BindView(R.id.drawerlayout) DrawerLayout drawlayout;
@@ -52,36 +52,22 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private void init() {
         user = (User) getIntent().getSerializableExtra("user");
         Log.d(TAG, user.getName() + " sign in successfully.");
-        initPages();
-        initTabs();
+        options = getResources().getStringArray(R.array.activityOptions);
+        for (String option: options)
+            fragments.add(ActivitiesFragment.getInstance(option));
+        setupViewPagerAndTabLayout();
         setupActionBarDrawerToggle();
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initPages() {
-        options = getResources().getStringArray(R.array.activityOptions);
-        viewPager.setAdapter(pagerAdapter = new MyPagerAdapter(getSupportFragmentManager()));
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        viewPager.setOffscreenPageLimit(options.length);
-    }
-
-    private void initTabs() {
+    private void setupViewPagerAndTabLayout() {
+        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if(item.getItemId() == android.R.id.home)
-        {
-            drawlayout.openDrawer(GravityCompat.START);
-            return true ;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void setupActionBarDrawerToggle() {
+        Log.d(TAG, "setupActionBarDrawerToggle");
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawlayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -100,11 +86,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.d(TAG, "onNavigationItemSelected .. " + item.getTitle());
         item.setChecked(true);
         drawlayout.closeDrawers();
+        ActivitiesFragment.getInstance(item.getTitle().toString());
         return true;
     }
-
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
@@ -114,14 +101,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public CharSequence getPageTitle(int position) {
+            Log.d(TAG, "get Page Title .. " + options[position]);
             super.getPageTitle(position);
             return options[position];
         }
 
         @Override
         public Fragment getItem(int position) {
-            String option = options[position];
-            return ActivitiesFragment.getInstance(option);
+            Log.d(TAG, "get Fragment .. " + position);
+            return fragments.get(position);
         }
 
         @Override

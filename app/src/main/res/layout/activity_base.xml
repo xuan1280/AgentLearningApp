@@ -10,10 +10,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -28,24 +28,20 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/container"
-            android:background="@color/colorPrimary" />
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/tabs" />
+            android:layout_above="@+id/tabs"
+            android:layout_below="@+id/appBarLayout"/>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
@@ -53,5 +49,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorPrimary" />
+        android:background="@color/colorPrimary"
+        app:menu="@menu/menu_drawer" />
 </android.support.v4.widget.DrawerLayout>
