@@ -77,31 +77,24 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
         Log.d(TAG, "refresh all activities");
     }
 
-    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+    public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public MyAdapter() {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             //TODO use @BindView instead FindViewById
-            private TextView titleTxt;
-            private TextView categoryTxt;
-            private TextView dateTxt;
-            private TextView previewTxt;
-            private ImageButton interestedOrNotImg;
-            private TextView joinedOrNotTxt;
-            private Button turnToWebSiteBtn;
+            @BindView(R.id.activityTitleTxt) TextView titleTxt;
+            @BindView(R.id.activityCategoryTxt) TextView categoryTxt;
+            @BindView(R.id.activityDateTxt) TextView dateTxt;
+            @BindView(R.id.activityPreviewTxt) TextView previewTxt;
+            @BindView(R.id.interestingOrNotImg) ImageButton interestedOrNotImg;
+            @BindView(R.id.joinOrNotTxt) TextView joinedOrNotTxt;
+            @BindView(R.id.turnToWebSiteBtn) Button turnToWebSiteBtn;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
-                titleTxt = itemView.findViewById(R.id.activityTitleTxt);
-                categoryTxt = itemView.findViewById(R.id.activityCategoryTxt);
-                dateTxt = itemView.findViewById(R.id.activityDateTxt);
-                previewTxt = itemView.findViewById(R.id.activityPreviewTxt);
-                joinedOrNotTxt = itemView.findViewById(R.id.joinOrNotTxt);
-                interestedOrNotImg = itemView.findViewById(R.id.interestingOrNotImg);
-                turnToWebSiteBtn = itemView.findViewById(R.id.turnToWebSiteBtn);
             }
         }
 
