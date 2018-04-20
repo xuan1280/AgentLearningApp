@@ -15,16 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:padding="3dp"
             android:text="test"
             android:textColor="#39a430"
-            android:padding="3dp"
             android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
-            >
+            android:padding="3dp">
 
             <TextView
                 android:id="@+id/activityCategoryTxt"
@@ -49,6 +48,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/activityPreviewTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -61,15 +61,24 @@
             android:padding="3dp">
 
             <ImageView
+                android:id="@+id/interestingOrNotImg"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/heart"/>
+                android:src="@drawable/heart" />
 
             <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="以參加" />
+                android:id="@+id/joinOrNotTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="以參加" />
 
+            <Button
+                android:id="@+id/turnToWebBtn"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="#00000000"
+                android:gravity="end"
+                android:text="全國藝文活動資訊網" />
 
         </LinearLayout>
 
