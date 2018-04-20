@@ -2,13 +2,14 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="7dp">
+        android:padding="7dp"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/activityTitleTxt"
@@ -60,22 +61,22 @@
             android:layout_height="wrap_content"
             android:padding="3dp">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/interestingOrNotImg"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/heart" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/heart0" />
 
             <TextView
                 android:id="@+id/joinOrNotTxt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="以參加" />
 
             <Button
-                android:id="@+id/turnToWebBtn"
+                android:id="@+id/turnToWebSiteBtn"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:background="#00000000"
                 android:gravity="end"
                 android:text="全國藝文活動資訊網" />

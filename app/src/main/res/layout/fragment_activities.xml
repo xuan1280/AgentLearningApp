@@ -5,10 +5,18 @@
     tools:context="com.ood.clean.waterball.agentlearningapp.ActivitiesFragment">
 
     <!-- TODO: Update blank fragment_activities layout -->
-    <TextView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/joinedActivitiesSwipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/textview"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

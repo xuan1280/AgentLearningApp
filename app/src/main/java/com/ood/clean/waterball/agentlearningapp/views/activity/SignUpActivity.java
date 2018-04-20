@@ -16,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ood.clean.waterball.agentlearningapp.R;
-import com.ood.clean.waterball.agentlearningapp.modles.entities.City;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
 import com.ood.clean.waterball.agentlearningapp.modles.repositories.StubUserRepository;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignUpModel;
