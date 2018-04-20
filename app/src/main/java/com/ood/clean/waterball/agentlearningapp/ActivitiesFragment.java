@@ -83,7 +83,6 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            //TODO use @BindView instead FindViewById
             @BindView(R.id.activityTitleTxt) TextView titleTxt;
             @BindView(R.id.activityCategoryTxt) TextView categoryTxt;
             @BindView(R.id.activityDateTxt) TextView dateTxt;
