@@ -25,6 +25,7 @@ public class StubUserRepository implements UserRepository {
         List<User> users = new ArrayList<>();
         users.add(new User(1, "123", 3, true, "123", "123", new City(2, "新北市")));
         users.add(new User(2, "waterball", 22, true, "waterball", "123", new City(2, "新北市")));
+        users.add(new User(3, "qq", 3, true, "qwe", "qwe", new City(2, "新北市")));
         for (User user: users)
             usersMap.put(user.getAccount(), user);
     }
@@ -53,7 +54,7 @@ public class StubUserRepository implements UserRepository {
         return new ResponseModel<>(40000, "parameter invalid", null);
     }
 
-    public boolean isParameterInvalid(SignUpModel signUpModel){
+    private boolean isParameterInvalid(SignUpModel signUpModel){
         if (signUpModel.getAccount().equals("") || signUpModel.getPassword().equals("") || signUpModel.getName().equals("") || signUpModel.getAge() == 0 || signUpModel.getCityId() == 0)
             return true;
         return false;
