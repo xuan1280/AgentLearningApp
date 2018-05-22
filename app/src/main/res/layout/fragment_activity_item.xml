@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="5.0dp"
+    android:layout_margin="5dp"
+    card_view:cardElevation="10dp"
+    card_view:cardBackgroundColor="#d9d7d7">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="7dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@drawable/activity_card_background">
 
         <TextView
             android:id="@+id/activityTitleTxt"
@@ -65,24 +72,28 @@
                 android:id="@+id/interestingOrNotImg"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/heart0" />
+                android:src="@drawable/interested"
+                android:background="#00000000"/>
 
             <TextView
                 android:id="@+id/joinOrNotTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="以參加" />
+                android:text="以參加"
+                android:paddingStart="5dp"
+                android:gravity="center"
+                android:paddingLeft="5dp" />
 
             <Button
                 android:id="@+id/turnToWebSiteBtn"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:background="#00000000"
-                android:gravity="end"
+                android:gravity="end|center_vertical"
                 android:text="全國藝文活動資訊網" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

@@ -110,7 +110,7 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
             holder.categoryTxt.setText("展覽類");
             holder.dateTxt.setText("2018/4/15");
             holder.previewTxt.setText("國際資訊展就在明天，多款電腦，歡迎參觀，快來搶便宜喔");
-            holder.interestedOrNotImg.setImageResource(R.drawable.interested1);
+            holder.interestedOrNotImg.setImageResource(R.drawable.interested);
             holder.joinedOrNotTxt.setText("未參加");
             holder.turnToWebSiteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
