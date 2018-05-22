@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.ood.clean.waterball.agentlearningapp.R;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
 import com.ood.clean.waterball.agentlearningapp.modles.repositories.StubUserRepository;
+import com.ood.clean.waterball.agentlearningapp.modles.repositories.UserRetrofitRepository;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignUpModel;
 import com.ood.clean.waterball.agentlearningapp.presenter.SignUpPresenter;
 import com.ood.clean.waterball.agentlearningapp.views.base.SignUpView;
@@ -56,7 +57,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView, Ada
         Log.d(TAG, "start to sign up");
         setUpSpinner();
         setUpRadioGroup();
-        signUpPresenter = new SignUpPresenter(new StubUserRepository(), this);
+        signUpPresenter = new SignUpPresenter(new UserRetrofitRepository(), this);
     }
 
     private void setUpSpinner() {

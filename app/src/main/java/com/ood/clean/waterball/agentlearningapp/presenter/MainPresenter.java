@@ -9,6 +9,8 @@ import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.ResponseModel;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignInModel;
 import com.ood.clean.waterball.agentlearningapp.views.base.MainView;
 
+import java.io.IOException;
+
 
 public class MainPresenter {
     private final static String TAG = "MainPresenter";
@@ -29,13 +31,20 @@ public class MainPresenter {
         new Thread(){
             @Override
             public void run() {
-                ResponseModel<User> responseModel = userRepository.signIn(signInModel);
-                if (responseModel.getCode() == 404001)
-                    handler.post(()-> mainView.onAccountNoFound());
-                else if (responseModel.getCode() == 404002)
-                    handler.post(()-> mainView.onPasswordNotCorrect());
-                else
-                    handler.post(()-> mainView.onSignInSuccessfully(responseModel.getData()));
+                ResponseModel<User> responseModel;
+                try {
+                    responseModel = userRepository.signIn(signInModel);
+                    if (responseModel.getCode() == 404001)
+                        handler.post(()-> mainView.onAccountNoFound());
+                    else if (responseModel.getCode() == 404002)
+                        handler.post(()-> mainView.onPasswordNotCorrect());
+                    else {
+                        handler.post(()-> mainView.onSignInSuccessfully(responseModel.getData()));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         }.start();
     }

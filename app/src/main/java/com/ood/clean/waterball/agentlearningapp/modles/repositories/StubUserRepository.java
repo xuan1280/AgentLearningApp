@@ -43,7 +43,7 @@ public class StubUserRepository implements UserRepository {
 
     @Override
     public ResponseModel<User> signUp(SignUpModel signUpModel) {
-        User signUpUser = new User(usersMap.size()+1, signUpModel.getName(), signUpModel.getAge(), signUpModel.isGender(), signUpModel.getAccount(), signUpModel.getPassword(), new City(signUpModel.getCityId(), "新北"));
+        User signUpUser = new User(usersMap.size()+1, signUpModel.getName(), signUpModel.getAge(), signUpModel.getGender(), signUpModel.getAccount(), signUpModel.getPassword(), new City(signUpModel.getCityId(), "新北"));
         User user = usersMap.get(signUpModel.getAccount());
         if (user == null && !isParameterInvalid(signUpModel)) {
             usersMap.put(signUpUser.getAccount(), signUpUser);

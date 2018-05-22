@@ -9,6 +9,8 @@ import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.ResponseModel;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignUpModel;
 import com.ood.clean.waterball.agentlearningapp.views.base.SignUpView;
 
+import java.io.IOException;
+
 public class SignUpPresenter {
     private final static String TAG = "SignUpPresenter";
     private UserRepository userRepository;
@@ -25,13 +27,19 @@ public class SignUpPresenter {
         new Thread() {
             @Override
             public void run() {
-                ResponseModel<User> responseModel = userRepository.signUp(signUpModel);
-                if (responseModel.getCode() == 40001)
-                    handler.post(() -> signUpView.onAccountDuplicated());
-                else if (responseModel.getCode() == 40000)
-                    handler.post(() -> signUpView.onParameterInvalid());
-                else
-                    handler.post(() -> signUpView.onSignUpSuccessfully(responseModel.getData()));
+                ResponseModel<User> responseModel;
+                try {
+                    responseModel = userRepository.signUp(signUpModel);
+                    if (responseModel.getCode() == 40001)
+                        handler.post(() -> signUpView.onAccountDuplicated());
+                    else if (responseModel.getCode() == 40000)
+                        handler.post(() -> signUpView.onParameterInvalid());
+                    else {
+                        handler.post(() -> signUpView.onSignUpSuccessfully(responseModel.getData()));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
 

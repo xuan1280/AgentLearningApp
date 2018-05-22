@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.ood.clean.waterball.agentlearningapp.R;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
 import com.ood.clean.waterball.agentlearningapp.modles.repositories.StubUserRepository;
+import com.ood.clean.waterball.agentlearningapp.modles.repositories.UserRetrofitRepository;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignInModel;
 import com.ood.clean.waterball.agentlearningapp.presenter.MainPresenter;
 import com.ood.clean.waterball.agentlearningapp.views.base.MainView;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        mainPresenter = new MainPresenter(new StubUserRepository());
+        mainPresenter = new MainPresenter(new UserRetrofitRepository());
         mainPresenter.setMainView(this);
     }
 
