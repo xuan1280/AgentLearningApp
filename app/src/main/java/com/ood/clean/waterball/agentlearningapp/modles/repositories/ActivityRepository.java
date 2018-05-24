@@ -4,6 +4,6 @@ import com.ood.clean.waterball.agentlearningapp.modles.entities.Activity;
 
 import java.util.List;
 
-public interface AvtivityRepository {
+public interface ActivityRepository {
     List<Activity> getRecentActivities();
 }
