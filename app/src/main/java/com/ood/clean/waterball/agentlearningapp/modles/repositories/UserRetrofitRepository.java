@@ -7,10 +7,12 @@ import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.ResponseModel;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignInModel;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignUpModel;
+import com.ood.clean.waterball.agentlearningapp.utils.ResponseUtils;
 
 import java.io.IOException;
 
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
@@ -32,8 +34,9 @@ public class UserRetrofitRepository implements UserRepository {
 
     @Override
     public ResponseModel<User> signIn(SignInModel signInModel) throws IOException {
-        Log.d(TAG, "signIn " + signInModel.getAccount());
-        ResponseModel<User> responseModel = userAPI.signIn(signInModel.getAccount(), signInModel.getPassword()).execute().body();
+        Log.d(TAG, "signIn" + signInModel.getAccount());
+        Response<ResponseModel<User>> response = userAPI.signIn(signInModel.getAccount(), signInModel.getPassword()).execute();
+        ResponseModel<User> responseModel = ResponseUtils.getBody(response);
         assert responseModel != null;
         Log.d(TAG, responseModel.toString());
         return responseModel;
