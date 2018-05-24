@@ -32,7 +32,7 @@ public class UserRetrofitRepository implements UserRepository {
 
     @Override
     public ResponseModel<User> signIn(SignInModel signInModel) throws IOException {
-        Log.d(TAG, "signIn" + signInModel.getAccount());
+        Log.d(TAG, "signIn " + signInModel.getAccount());
         ResponseModel<User> responseModel = userAPI.signIn(signInModel.getAccount(), signInModel.getPassword()).execute().body();
         assert responseModel != null;
         Log.d(TAG, responseModel.toString());
