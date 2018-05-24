@@ -72,8 +72,9 @@
                 android:id="@+id/interestingOrNotImg"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/interested"
-                android:background="#00000000"/>
+                android:src="@drawable/not_interested"
+                android:background="#00000000"
+                android:onClick="changeMindAboutActivityBtn"/>
 
             <TextView
                 android:id="@+id/joinOrNotTxt"

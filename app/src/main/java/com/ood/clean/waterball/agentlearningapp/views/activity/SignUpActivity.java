@@ -85,10 +85,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView, Ada
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if (i == R.id.boyRadio)
-            gender = true;
-        else if (i == R.id.girlRadio)
-            gender = false;
+        gender = ( i == R.id.boyRadio );
     }
 
     public void onSignUpBtnClick(View view) {
