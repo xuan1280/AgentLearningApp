@@ -38,13 +38,11 @@ public class MainPresenter {
                         handler.post(()-> mainView.onAccountNoFound());
                     else if (responseModel.getCode() == 404002)
                         handler.post(()-> mainView.onPasswordNotCorrect());
-                    else {
+                    else
                         handler.post(()-> mainView.onSignInSuccessfully(responseModel.getData()));
-                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         }.start();
     }
