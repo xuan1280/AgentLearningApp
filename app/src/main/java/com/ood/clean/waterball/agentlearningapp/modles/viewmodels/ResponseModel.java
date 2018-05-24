@@ -1,5 +1,7 @@
 package com.ood.clean.waterball.agentlearningapp.modles.viewmodels;
 
+import android.annotation.SuppressLint;
+
 public class ResponseModel<T> {
     private int code;
     private String message;
@@ -33,5 +35,11 @@ public class ResponseModel<T> {
 
     public T getData() {
         return data;
+    }
+
+    @SuppressLint("DefaultLocale")
+    @Override
+    public String toString() {
+        return String.format("%d %s", getCode(), getMessage());
     }
 }

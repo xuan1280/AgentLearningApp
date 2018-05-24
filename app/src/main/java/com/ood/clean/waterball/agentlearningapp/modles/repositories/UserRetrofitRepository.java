@@ -33,7 +33,10 @@ public class UserRetrofitRepository implements UserRepository {
     @Override
     public ResponseModel<User> signIn(SignInModel signInModel) throws IOException {
         Log.d(TAG, "signIn" + signInModel.getAccount());
-        return userAPI.signIn(signInModel.getAccount(), signInModel.getPassword()).execute().body();
+        ResponseModel<User> responseModel = userAPI.signIn(signInModel.getAccount(), signInModel.getPassword()).execute().body();
+        assert responseModel != null;
+        Log.d(TAG, responseModel.toString());
+        return responseModel;
     }
 
     @Override
@@ -58,22 +61,22 @@ public class UserRetrofitRepository implements UserRepository {
     }
 
     public interface UserAPI{
-        String RESOURCE = "HZN/api/user";
+        String RESOURCE = "HZN/api/User";
 
-        @Headers("Content-Type:application/json")
+        @Headers("Content-Type:application/x-www-form-urlencoded")
         @FormUrlEncoded
         @POST(RESOURCE + "/signUp")
-        public Call<ResponseModel<User>> signUp(@Field("name") String name,
-                                                @Field("gender") boolean gender,
-                                                @Field("account") String account,
-                                                @Field("password") String password,
-                                                @Field("cityId") int cityId,
-                                                @Field("age") int age);
+        Call<ResponseModel<User>> signUp(@Field("name") String name,
+                                         @Field("gender") boolean gender,
+                                         @Field("account") String account,
+                                         @Field("password") String password,
+                                         @Field("cityId") int cityId,
+                                         @Field("age") int age);
 
-        @Headers("Content-Type:application/json")
+        @Headers("Content-Type:application/x-www-form-urlencoded")
         @FormUrlEncoded
         @POST(RESOURCE + "/signIn")
-        public Call<ResponseModel<User>> signIn(@Field("account") String account,
-                                                @Field("password") String password);
+        Call<ResponseModel<User>> signIn(@Field("account") String account,
+                                         @Field("password") String password);
     }
 }
