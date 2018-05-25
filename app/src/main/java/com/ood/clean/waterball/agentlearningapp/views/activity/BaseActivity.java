@@ -2,6 +2,7 @@ package com.ood.clean.waterball.agentlearningapp.views.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,17 +11,25 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.ood.clean.waterball.agentlearningapp.ActivitiesFragment;
 import com.ood.clean.waterball.agentlearningapp.R;
+import com.ood.clean.waterball.agentlearningapp.modles.entities.Activity;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
+import com.ood.clean.waterball.agentlearningapp.modles.repositories.ActivityRetrofitRepository;
+import com.ood.clean.waterball.agentlearningapp.presenter.ActivityPresenter;
+import com.ood.clean.waterball.agentlearningapp.views.base.ActivitiesRefreshView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +49,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.pager) ViewPager viewPager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         init();
-
     }
 
     private void init() {
@@ -58,6 +66,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setupViewPagerAndTabLayout();
         setupActionBarDrawerToggle();
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     private void setupViewPagerAndTabLayout() {

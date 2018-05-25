@@ -11,6 +11,9 @@ import java.io.IOException;
 public interface UserRepository {
     ResponseModel<User> signIn(SignInModel signInModel) throws IOException;
     ResponseModel<User> signUp(SignUpModel signUpModel) throws IOException;
+    ResponseModel<User> actionOnActivity(int userId, int activityId, String action, boolean value) throws IOException;
+    ResponseModel<User> pushUserPreferences(int userId, int activityId, int browsingTime, int clickTime) throws IOException;
+    ResponseModel<User> getUserRelatedActivities(int userID, String type, int count) throws IOException;
     void removeUser(User user);
     void updateUser(User user);
 }

@@ -54,6 +54,21 @@ public class UserRetrofitRepository implements UserRepository {
     }
 
     @Override
+    public ResponseModel<User> actionOnActivity(int userId, int activityId, String action, boolean value) throws IOException {
+        return null;
+    }
+
+    @Override
+    public ResponseModel<User> pushUserPreferences(int userId, int activityId, int browsingTime, int clickTime) throws IOException {
+        return null;
+    }
+
+    @Override
+    public ResponseModel<User> getUserRelatedActivities(int userID, String type, int count) throws IOException {
+        return null;
+    }
+
+    @Override
     public void removeUser(User user) {
 
     }

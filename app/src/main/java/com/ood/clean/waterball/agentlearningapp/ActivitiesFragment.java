@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,16 +18,28 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.ood.clean.waterball.agentlearningapp.modles.entities.Activity;
+import com.ood.clean.waterball.agentlearningapp.modles.repositories.ActivityRetrofitRepository;
+import com.ood.clean.waterball.agentlearningapp.presenter.ActivityPresenter;
+import com.ood.clean.waterball.agentlearningapp.views.base.ActivitiesRefreshView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ActivitiesRefreshView{
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    SwipeRefreshLayout swipeRefreshLayout;
     private final static String TAG = "ActivitiesFragment";
     private final static String DATA_KEY = "d1";
     private String data;
+    private List<Activity> activities = new ArrayList<>();
+    private ActivityPresenter activityPresenter = new ActivityPresenter(new ActivityRetrofitRepository(), this);
 
     public ActivitiesFragment() {
         // Required empty public constructor
@@ -50,7 +63,11 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_activities, container, false);
+        //TODO 優化
+        View view = inflater.inflate(R.layout.fragment_activities, container, false);
+        swipeRefreshLayout = view.findViewById(R.id.joinedActivitiesSwipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        return view;
     }
 
     @Override
@@ -62,6 +79,7 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
     }
 
     private void setupRecyclerView() {
+//        activityPresenter.getRecentActivities("tag", 0, 20, "2018-1-1", "2019-1-1", "2019-1-1");
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         MyAdapter myAdapter = new MyAdapter();
         recyclerView.setAdapter(myAdapter);
@@ -75,6 +93,13 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void onRefresh() {
         Log.d(TAG, "refresh all activities");
+        new AlertDialog.Builder(getContext())
+                .setMessage("test").show();
+    }
+
+    @Override
+    public void onActivitiesRefreshSuccessfully() {
+
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
