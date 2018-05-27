@@ -8,6 +8,7 @@ import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.ResponseModel;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignInModel;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignUpModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +53,21 @@ public class StubUserRepository implements UserRepository {
         else if (user != null)
             return new ResponseModel<>(40001, "account duplicated", null);
         return new ResponseModel<>(40000, "parameter invalid", null);
+    }
+
+    @Override
+    public ResponseModel<User> actionOnActivity(int userId, int activityId, String action, boolean value) throws IOException {
+        return null;
+    }
+
+    @Override
+    public ResponseModel<User> pushUserPreferences(int userId, int activityId, int browsingTime, int clickTime) throws IOException {
+        return null;
+    }
+
+    @Override
+    public ResponseModel<User> getUserRelatedActivities(int userID, String type, int count) throws IOException {
+        return null;
     }
 
     private boolean isParameterInvalid(SignUpModel signUpModel){

@@ -8,28 +8,18 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.ood.clean.waterball.agentlearningapp.ActivitiesFragment;
 import com.ood.clean.waterball.agentlearningapp.R;
-import com.ood.clean.waterball.agentlearningapp.modles.entities.Activity;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
-import com.ood.clean.waterball.agentlearningapp.modles.repositories.ActivityRetrofitRepository;
-import com.ood.clean.waterball.agentlearningapp.presenter.ActivityPresenter;
-import com.ood.clean.waterball.agentlearningapp.views.base.ActivitiesRefreshView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +33,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private User user;
     private String[] options;
     @BindView(R.id.navigationView) NavigationView navigationView;
-    @BindView(R.id.drawerlayout) DrawerLayout drawlayout;
+    @BindView(R.id.drawerlayout) DrawerLayout drawerLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.pager) ViewPager viewPager;
@@ -77,7 +67,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private void setupActionBarDrawerToggle() {
         Log.d(TAG, "setupActionBarDrawerToggle");
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawlayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -89,7 +79,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        drawlayout.addDrawerListener(actionBarDrawerToggle);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
 
@@ -97,7 +87,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Log.d(TAG, "onNavigationItemSelected .. " + item.getTitle());
         item.setChecked(true);
-        drawlayout.closeDrawers();
+        drawerLayout.closeDrawers();
         ActivitiesFragment.getInstance(item.getTitle().toString());
         return true;
     }

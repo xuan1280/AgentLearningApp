@@ -9,6 +9,8 @@ import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.ResponseModel;
 import com.ood.clean.waterball.agentlearningapp.views.base.ActivitiesRefreshView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActivityPresenter {
     private final static String TAG = "ActivityPresenter";
@@ -26,13 +28,13 @@ public class ActivityPresenter {
         new Thread(){
             @Override
             public void run() {
-                ResponseModel<Activity> responseModel;
+                ResponseModel<List<Activity>> responseModel;
                 try {
-                    responseModel = activityRepository.getRecentActivities(tag, offset, limit, startDate, endDate, updatedDate);
-                    if (responseModel.getCode() == 200)
-                        handler.post(() -> activitiesRefreshView.onActivitiesRefreshSuccessfully());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    responseModel = activityRepository.getRecentActivities(offset, limit);
+                    if(responseModel.getCode() == 0)
+                        handler.post(() -> activitiesRefreshView.onActivitiesRefreshSuccessfully(responseModel.getData()));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             }
         }.start();

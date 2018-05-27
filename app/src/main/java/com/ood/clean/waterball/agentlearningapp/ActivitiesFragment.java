@@ -25,6 +25,7 @@ import com.ood.clean.waterball.agentlearningapp.modles.repositories.ActivityRetr
 import com.ood.clean.waterball.agentlearningapp.presenter.ActivityPresenter;
 import com.ood.clean.waterball.agentlearningapp.views.base.ActivitiesRefreshView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,13 +33,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ActivitiesRefreshView{
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ActivitiesRefreshView {
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     private final static String TAG = "ActivitiesFragment";
     private final static String DATA_KEY = "d1";
     private String data;
-    private List<Activity> activities = new ArrayList<>();
     private ActivityPresenter activityPresenter = new ActivityPresenter(new ActivityRetrofitRepository(), this);
 
     public ActivitiesFragment() {
@@ -74,14 +75,13 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        setupRecyclerView();
+        activityPresenter.getRecentActivities(null, 0, 20, null, null, null);
         Log.d(TAG, data + " view created");
     }
 
-    private void setupRecyclerView() {
-//        activityPresenter.getRecentActivities("tag", 0, 20, "2018-1-1", "2019-1-1", "2019-1-1");
+    private void setupRecyclerView(List<Activity> activities) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        MyAdapter myAdapter = new MyAdapter();
+        MyAdapter myAdapter = new MyAdapter(activities);
         recyclerView.setAdapter(myAdapter);
     }
 
@@ -93,28 +93,35 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void onRefresh() {
         Log.d(TAG, "refresh all activities");
-        new AlertDialog.Builder(getContext())
-                .setMessage("test").show();
     }
 
     @Override
-    public void onActivitiesRefreshSuccessfully() {
-
+    public void onActivitiesRefreshSuccessfully(List<Activity> activities) {
+        setupRecyclerView(activities);
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+        private List<Activity> activities;
 
-        public MyAdapter() {
+        public MyAdapter(List<Activity> activities) {
+            this.activities = activities;
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            @BindView(R.id.activityTitleTxt) TextView titleTxt;
-            @BindView(R.id.activityCategoryTxt) TextView categoryTxt;
-            @BindView(R.id.activityDateTxt) TextView dateTxt;
-            @BindView(R.id.activityPreviewTxt) TextView previewTxt;
-            @BindView(R.id.interestingOrNotImg) ImageButton interestedOrNotImg;
-            @BindView(R.id.joinOrNotTxt) TextView joinedOrNotTxt;
-            @BindView(R.id.turnToWebSiteBtn) Button turnToWebSiteBtn;
+            @BindView(R.id.activityTitleTxt)
+            TextView titleTxt;
+            @BindView(R.id.activityCategoryTxt)
+            TextView categoryTxt;
+            @BindView(R.id.activityDateTxt)
+            TextView dateTxt;
+            @BindView(R.id.activityPreviewTxt)
+            TextView previewTxt;
+            @BindView(R.id.interestingOrNotImg)
+            ImageButton interestedOrNotImg;
+            @BindView(R.id.joinOrNotTxt)
+            TextView joinedOrNotTxt;
+            @BindView(R.id.turnToWebSiteBtn)
+            Button turnToWebSiteBtn;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -132,10 +139,11 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Log.d("ViewHolder: ", "第" + position + "筆資料");
-            holder.titleTxt.setText("國際資訊展");
-            holder.categoryTxt.setText("展覽類");
-            holder.dateTxt.setText("2018/4/15");
-            holder.previewTxt.setText("國際資訊展就在明天，多款電腦，歡迎參觀，快來搶便宜喔");
+            Activity activity = activities.get(position);
+            holder.titleTxt.setText(activity.getTitle());
+            holder.categoryTxt.setText(activity.getTags());
+            holder.dateTxt.setText(activity.getStartDate().substring(0, 10) + " ~ " + activity.getEndDate().substring(0, 10));
+            holder.previewTxt.setText(activity.getContent());
             holder.interestedOrNotImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -147,7 +155,7 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
             holder.turnToWebSiteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Uri uri = Uri.parse("https://www.google.com/");
+                    Uri uri = Uri.parse(activity.getLink());
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                 }
@@ -156,7 +164,7 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
 
         @Override
         public int getItemCount() {
-            return 10;
+            return activities.size();
         }
     }
 
