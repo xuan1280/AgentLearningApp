@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,15 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ood.clean.waterball.agentlearningapp.modles.entities.Activity;
 import com.ood.clean.waterball.agentlearningapp.modles.repositories.ActivityRetrofitRepository;
 import com.ood.clean.waterball.agentlearningapp.presenter.ActivityPresenter;
 import com.ood.clean.waterball.agentlearningapp.views.base.ActivitiesRefreshView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +34,13 @@ import butterknife.ButterKnife;
 public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ActivitiesRefreshView {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.fragmentWaitingPB)
+    ProgressBar progressBar;
     SwipeRefreshLayout swipeRefreshLayout;
     private final static String TAG = "ActivitiesFragment";
     private final static String DATA_KEY = "d1";
+    private List<Activity> activities = new ArrayList<>();
+    private MyAdapter myAdapter;
     private String data;
     private ActivityPresenter activityPresenter = new ActivityPresenter(new ActivityRetrofitRepository(), this);
 
@@ -77,12 +79,36 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
         ButterKnife.bind(this, view);
         activityPresenter.getRecentActivities(null, 0, 20, null, null, null);
         Log.d(TAG, data + " view created");
+        setupRecyclerView(activities);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void setupRecyclerView(List<Activity> activities) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        MyAdapter myAdapter = new MyAdapter(activities);
+        myAdapter = new MyAdapter(activities);
         recyclerView.setAdapter(myAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount() - 1);
+                //得到lastChildView的bottom坐标值
+                int lastChildBottom = lastChildView.getBottom();
+                //得到Recyclerview的底部坐标减去底部padding值，也就是显示内容最底部的坐标
+                int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
+                //通过这个lastChildView得到这个view当前的position值
+                int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
+                if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
+                    activityPresenter.getRecentActivities(null, activities.size(), 20, null, null, null);
+                    recyclerView.smoothScrollToPosition(myAdapter.getItemCount() - 1);
+                }
+            }
+        });
     }
 
     @Override
@@ -93,11 +119,16 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void onRefresh() {
         Log.d(TAG, "refresh all activities");
+        swipeRefreshLayout.setRefreshing(true);
+        activityPresenter.getRecentActivities(null, 0, 20, null, null, null);
     }
 
     @Override
     public void onActivitiesRefreshSuccessfully(List<Activity> activities) {
-        setupRecyclerView(activities);
+        this.activities.addAll(activities);
+        myAdapter.notifyDataSetChanged();
+        progressBar.setVisibility(View.GONE);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -139,16 +170,18 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Log.d("ViewHolder: ", "第" + position + "筆資料");
+            boolean interesting = false;
             Activity activity = activities.get(position);
             holder.titleTxt.setText(activity.getTitle());
             holder.categoryTxt.setText(activity.getTags());
-            holder.dateTxt.setText(activity.getStartDate().substring(0, 10) + " ~ " + activity.getEndDate().substring(0, 10));
+            holder.dateTxt.setText(activity.getStartDate() == null ? "" : activity.getStartDate() + " ~ " + activity.getEndDate());
             holder.previewTxt.setText(activity.getContent());
             holder.interestedOrNotImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ImageButton imageButton = view.findViewById(R.id.interestingOrNotImg);
                     imageButton.setImageResource(R.drawable.interested);
+
                 }
             });
             holder.joinedOrNotTxt.setText("未參加");

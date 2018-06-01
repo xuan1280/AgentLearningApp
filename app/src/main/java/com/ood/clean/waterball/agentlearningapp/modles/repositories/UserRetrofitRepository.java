@@ -17,8 +17,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public class UserRetrofitRepository implements UserRepository {
     private final static String TAG = "UserRetrofitRepository";
@@ -45,12 +48,11 @@ public class UserRetrofitRepository implements UserRepository {
     @Override
     public ResponseModel<User> signUp(SignUpModel signUpModel) throws IOException {
         Log.d(TAG, "signUp" + signUpModel.getName());
-        return userAPI.signUp(signUpModel.getName(),
-                        signUpModel.getGender(),
-                        signUpModel.getAccount(),
-                        signUpModel.getPassword(),
-                        signUpModel.getCityId(),
-                        signUpModel.getAge()).execute().body();
+        Response<ResponseModel<User>> response = userAPI.signUp(signUpModel.getName(), signUpModel.getGender(), signUpModel.getAccount(), signUpModel.getPassword(), signUpModel.getCityId(), signUpModel.getAge()).execute();
+        ResponseModel<User> responseModel = ResponseUtils.getBody(response);
+        assert responseModel != null;
+        Log.d(TAG, responseModel.toString());
+        return responseModel;
     }
 
     @Override
@@ -64,8 +66,21 @@ public class UserRetrofitRepository implements UserRepository {
     }
 
     @Override
-    public ResponseModel<User> getUserRelatedActivities(int userID, String type, int count) throws IOException {
-        return null;
+    public ResponseModel<User> getUserRelatedActivities(int userId, String type, int count) throws IOException {
+        Response<ResponseModel<User>> response = userAPI.getUserRelatedActivities(userId, type, count).execute();
+        ResponseModel<User> responseModel = ResponseUtils.getBody(response);
+        assert responseModel != null;
+        Log.d(TAG, responseModel.toString());
+        return responseModel;
+    }
+
+    @Override
+    public ResponseModel<User> getAssociationBetweenUserAndActivity(int userId, int activityId) throws IOException {
+        Response<ResponseModel<User>> response = userAPI.getAssociationBetweenuserAndActivity(userId, activityId).execute();
+        ResponseModel<User> responseModel = ResponseUtils.getBody(response);
+        assert responseModel != null;
+        Log.d(TAG, responseModel.toString());
+        return responseModel;
     }
 
     @Override
@@ -96,5 +111,33 @@ public class UserRetrofitRepository implements UserRepository {
         @POST(RESOURCE + "/signIn")
         Call<ResponseModel<User>> signIn(@Field("account") String account,
                                          @Field("password") String password);
+
+        @Headers("Content-Type:application/x-www-form-urlencoded")
+        @FormUrlEncoded
+        @POST(RESOURCE + "/{userId}/")
+        Call<ResponseModel<User>> actionOnActivity(@Path("userId") int userId,
+                                                   @Field("activityId") int activityId,
+                                                   @Field("action") String action,
+                                                   @Field("value") boolean value);
+
+        @Headers("Content-Type:application/x-www-form-urlencoded")
+        @GET(RESOURCE + "/{userId}/related/")
+        Call<ResponseModel<User>> getUserRelatedActivities(@Path("userId") int userId,
+                                                           @Query("type") String type,
+                                                           @Query("count") int count);
+
+        @Headers("Content-Type:application/x-www-form-urlencoded")
+        @FormUrlEncoded
+        @POST(RESOURCE + "/{userId}/pref/")
+        Call<ResponseModel<User>> pushUserPreferences(@Path("userId") int userId,
+                                                   @Field("activityId") int activityId,
+                                                   @Field("browsingTime") int browsingTime,
+                                                   @Field("clickTime") int clickTime);
+
+        @Headers("Content-Type:application/x-www-form-urlencoded")
+        @GET(RESOURCE + "/{userId}/association/{activityId}")
+        Call<ResponseModel<User>> getAssociationBetweenuserAndActivity(@Path("userId") int userId,
+                                                           @Path("activityId") int activityId);
+
     }
 }

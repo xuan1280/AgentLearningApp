@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.ood.clean.waterball.agentlearningapp.ActivitiesFragment">
 
+    <ProgressBar
+        android:id="@+id/fragmentWaitingPB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <!-- TODO: Update blank fragment_activities layout -->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/joinedActivitiesSwipeRefreshLayout"
