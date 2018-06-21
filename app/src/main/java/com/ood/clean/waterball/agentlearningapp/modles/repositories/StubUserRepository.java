@@ -2,6 +2,8 @@ package com.ood.clean.waterball.agentlearningapp.modles.repositories;
 
 import android.util.Log;
 
+import com.ood.clean.waterball.agentlearningapp.modles.entities.Activity;
+import com.ood.clean.waterball.agentlearningapp.modles.entities.UserAssociation;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.City;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.ResponseModel;
@@ -56,7 +58,7 @@ public class StubUserRepository implements UserRepository {
     }
 
     @Override
-    public ResponseModel<User> actionOnActivity(int userId, int activityId, String action, boolean value) throws IOException {
+    public ResponseModel<User> performOrCancelActionOnActivity(int userId, int activityId, String action, boolean value) throws IOException {
         return null;
     }
 
@@ -66,7 +68,17 @@ public class StubUserRepository implements UserRepository {
     }
 
     @Override
-    public ResponseModel<User> getUserRelatedActivities(int userID, String type, int count) throws IOException {
+    public ResponseModel<List<Activity>> getUserRelatedActivities(int userID, String type, int count) throws IOException {
+        return null;
+    }
+
+    @Override
+    public ResponseModel<List<Activity>> getUserRelatedActivities(int userId, String type) throws IOException {
+        return null;
+    }
+
+    @Override
+    public ResponseModel<UserAssociation> getAssociationBetweenUserAndActivity(int userId, int activityId) throws IOException {
         return null;
     }
 

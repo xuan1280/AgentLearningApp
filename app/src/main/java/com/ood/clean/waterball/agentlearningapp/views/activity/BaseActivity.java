@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +45,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_base);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.drawable.ear_icon);
         init();
     }
 
@@ -51,12 +56,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         user = (User) getIntent().getSerializableExtra("user");
         Log.d(TAG, user.getName() + " sign in successfully.");
         options = getResources().getStringArray(R.array.activityOptions);
-        for (String option: options)
-            fragments.add(ActivitiesFragment.getInstance(option));
+        ActivitiesFragment.createActivityFragmentAction(user.getId());
+        for (int index  = 0; index < options.length; index++)
+            fragments.add(ActivitiesFragment.getInstance(options[index], index, user));
         setupViewPagerAndTabLayout();
         setupActionBarDrawerToggle();
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     private void setupViewPagerAndTabLayout() {
@@ -88,12 +93,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "onNavigationItemSelected .. " + item.getTitle());
         item.setChecked(true);
         drawerLayout.closeDrawers();
-        ActivitiesFragment.getInstance(item.getTitle().toString());
+        ActivitiesFragment.getInstance(item.getTitle().toString(), item.getItemId(), user);
         return true;
     }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
-
         MyPagerAdapter(FragmentManager fm){
             super(fm);
         }

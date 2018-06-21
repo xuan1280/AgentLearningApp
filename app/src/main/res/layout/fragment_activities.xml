@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <!-- TODO: Update blank fragment_activities layout -->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/joinedActivitiesSwipeRefreshLayout"
         android:layout_width="match_parent"

@@ -3,14 +3,15 @@ package com.ood.clean.waterball.agentlearningapp.views.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.ood.clean.waterball.agentlearningapp.R;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
-import com.ood.clean.waterball.agentlearningapp.modles.repositories.StubUserRepository;
 import com.ood.clean.waterball.agentlearningapp.modles.repositories.UserRetrofitRepository;
 import com.ood.clean.waterball.agentlearningapp.modles.viewmodels.SignInModel;
 import com.ood.clean.waterball.agentlearningapp.presenter.MainPresenter;
@@ -22,8 +23,12 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainView {
     private final static String TAG = "MainActivity";
-    @BindView(R.id.accountEd) EditText accountEd;
-    @BindView(R.id.passwordEd) EditText passwordEd;
+    @BindView(R.id.accountEd)
+    EditText accountEd;
+    @BindView(R.id.passwordEd)
+    EditText passwordEd;
+    @BindView(R.id.signInProgressBar)
+    ProgressBar signInProgressBar;
     private MainPresenter mainPresenter;
 
     @Override
@@ -33,12 +38,17 @@ public class MainActivity extends AppCompatActivity implements MainView {
         ButterKnife.bind(this);
         mainPresenter = new MainPresenter(new UserRetrofitRepository());
         mainPresenter.setMainView(this);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.drawable.ear_icon);
     }
 
     public void onLoginBtnClick(View view) {
         Log.d(TAG, "onLoginBtnClick");
         SignInModel signInModel = new SignInModel(accountEd.getText().toString(), passwordEd.getText().toString());
         mainPresenter.signIn(signInModel);
+        signInProgressBar.setVisibility(View.VISIBLE);
     }
 
     public void onCreateAccountBtnClick(View view) {
@@ -56,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         Log.d(TAG, "onSignInSuccessfully");
         Intent intent = new Intent(this, BaseActivity.class);
         intent.putExtra("user", user);
+        signInProgressBar.setVisibility(View.GONE);
         startActivity(intent);
     }
 
@@ -65,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         new AlertDialog.Builder(this)
                 .setMessage(getString(R.string.accountNotFound))
                 .show();
+        signInProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -73,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         new AlertDialog.Builder(this)
                 .setMessage(getString(R.string.passwordNotCorrect))
                 .show();
+        signInProgressBar.setVisibility(View.GONE);
     }
 
 }

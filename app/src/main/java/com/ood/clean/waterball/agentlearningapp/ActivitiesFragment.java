@@ -4,69 +4,104 @@ package com.ood.clean.waterball.agentlearningapp;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ood.clean.waterball.agentlearningapp.Animation.TargetHeightAnimation;
 import com.ood.clean.waterball.agentlearningapp.modles.entities.Activity;
+import com.ood.clean.waterball.agentlearningapp.modles.entities.UserAssociation;
+import com.ood.clean.waterball.agentlearningapp.modles.entities.DataKey;
+import com.ood.clean.waterball.agentlearningapp.modles.entities.User;
 import com.ood.clean.waterball.agentlearningapp.modles.repositories.ActivityRetrofitRepository;
-import com.ood.clean.waterball.agentlearningapp.presenter.ActivityPresenter;
-import com.ood.clean.waterball.agentlearningapp.views.base.ActivitiesRefreshView;
+import com.ood.clean.waterball.agentlearningapp.modles.repositories.UserRetrofitRepository;
+import com.ood.clean.waterball.agentlearningapp.presenter.ActivityFragmentPresenter;
+import com.ood.clean.waterball.agentlearningapp.utils.Action;
+import com.ood.clean.waterball.agentlearningapp.views.base.UsersAndActivityView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ActivitiesRefreshView {
+public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, UsersAndActivityView {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.fragmentWaitingPB)
     ProgressBar progressBar;
     SwipeRefreshLayout swipeRefreshLayout;
     private final static String TAG = "ActivitiesFragment";
-    private final static String DATA_KEY = "d1";
+    private final static String USER_KEY = "user_key";
     private List<Activity> activities = new ArrayList<>();
     private MyAdapter myAdapter;
     private String data;
-    private ActivityPresenter activityPresenter = new ActivityPresenter(new ActivityRetrofitRepository(), this);
+    private DataKey dataKey;
+    private User user;
+    private int positionByUserStay = 0;
+    private LinearLayoutManager layoutManager;
+    private static HashMap<Integer, UserAssociation> associationsMap = new HashMap<>();
+    private static HashMap<DataKey, Action> activityFragmentAction = new HashMap<>();
+    private ActivityFragmentPresenter activityFragmentPresenter = new ActivityFragmentPresenter(new ActivityRetrofitRepository(), new UserRetrofitRepository(), this);
 
     public ActivitiesFragment() {
         // Required empty public constructor
     }
 
-    public static ActivitiesFragment getInstance(String data) {
+
+    public static ActivitiesFragment getInstance(String data, int index, User user) {
         Log.d(TAG, data + " getInstance");
         ActivitiesFragment activitiesFragment = new ActivitiesFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(DATA_KEY, data);
+        String bundleKey = DataKey.values()[index].toString();
+        bundle.putString(bundleKey, data);
+        bundle.putInt("position", index);
+        bundle.putInt("userId", user.getId());
+        bundle.putSerializable(USER_KEY, user);
         activitiesFragment.setArguments(bundle);
         return activitiesFragment;
+    }
+
+    public static void createActivityFragmentAction(int userId) {
+        if (activityFragmentAction.isEmpty()) {
+            activityFragmentAction.put(DataKey.JoinActivities, (activityFragmentPresenter) -> activityFragmentPresenter.getUserRelatedActivities(userId, "join"));
+            activityFragmentAction.put(DataKey.NewestData, (activityFragmentPresenter) -> activityFragmentPresenter.getRecentActivities(userId, 0, 20));
+            activityFragmentAction.put(DataKey.UserPreferencesData, (activityFragmentPresenter) -> activityFragmentPresenter.getUserRelatedActivities(userId, "prefs"));
+        }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        data = getArguments().getString(DATA_KEY);
+        int keyId = getArguments().getInt("position");
+        user = (User) getArguments().getSerializable(USER_KEY);
+        assert user != null;
+        dataKey = DataKey.values()[keyId];
+        data = getArguments().getString(dataKey.toString());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //TODO 優化
         View view = inflater.inflate(R.layout.fragment_activities, container, false);
         swipeRefreshLayout = view.findViewById(R.id.joinedActivitiesSwipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -77,38 +112,34 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        activityPresenter.getRecentActivities(null, 0, 20, null, null, null);
         Log.d(TAG, data + " view created");
+        activityFragmentAction.get(dataKey).invoke(activityFragmentPresenter);
+        activities.clear();
         setupRecyclerView(activities);
         progressBar.setVisibility(View.VISIBLE);
+        //Todo three tab should refresh the activity view right now
     }
 
     private void setupRecyclerView(List<Activity> activities) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        myAdapter = new MyAdapter(activities);
+        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        myAdapter = new MyAdapter(activities, activityFragmentPresenter, user);
         recyclerView.setAdapter(myAdapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount() - 1);
-                //得到lastChildView的bottom坐标值
-                int lastChildBottom = lastChildView.getBottom();
-                //得到Recyclerview的底部坐标减去底部padding值，也就是显示内容最底部的坐标
-                int recyclerBottom = recyclerView.getBottom() - recyclerView.getPaddingBottom();
-                //通过这个lastChildView得到这个view当前的position值
-                int lastPosition = recyclerView.getLayoutManager().getPosition(lastChildView);
-                if (lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
-                    activityPresenter.getRecentActivities(null, activities.size(), 20, null, null, null);
-                    recyclerView.smoothScrollToPosition(myAdapter.getItemCount() - 1);
+        if (dataKey == DataKey.NewestData)
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+                        if (lastVisiblePosition >= layoutManager.getItemCount() - 1) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            positionByUserStay = activities.size();
+                            activityFragmentPresenter.getRecentActivities(user.getId(), activities.size(), 20);
+                        }
+                    }
                 }
-            }
-        });
+            });
     }
 
     @Override
@@ -120,25 +151,102 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
     public void onRefresh() {
         Log.d(TAG, "refresh all activities");
         swipeRefreshLayout.setRefreshing(true);
-        activityPresenter.getRecentActivities(null, 0, 20, null, null, null);
+        activityFragmentAction.get(dataKey).invoke(activityFragmentPresenter);
     }
 
     @Override
-    public void onActivitiesRefreshSuccessfully(List<Activity> activities) {
-        this.activities.addAll(activities);
+    public void onPerformOrCancelActionSuccessfully() {
+        Toast.makeText(this.getContext(), "action successfully!", Toast.LENGTH_SHORT).show();
+        myAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPerformOrCancelTargetNotFound() {
+        Toast.makeText(this.getContext(), "action target not found!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPerformOrCancelActionInvalid() {
+        Toast.makeText(this.getContext(), "action invalid!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGetAssociationBetweenUserAndActivityTargetNotFound() {
+        Toast.makeText(this.getContext(), "association target not found!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGetAssociationSuccessfully(UserAssociation data) {
+        associationsMap.put(data.getActivityId(), data);
+        for(int i = 0; i < activities.size(); i++)
+            if (activities.get(i).getId() == data.getActivityId())
+                myAdapter.notifyItemChanged(i);
+//        myAdapter.notifyDataSetChanged();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onGetUserRelatedActivitiesSuccessfully(List<Activity> datas) {
+        activities.clear();
+        activities.addAll(datas);
         myAdapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    @Override
+    public void onGetUserRelatedActivitiesTargetNotFound() {
+    }
+
+    @Override
+    public void onGetUserRelatedActivitiesActionInvalid() {
+
+    }
+
+    @Override
+    public void onPushUserPreferencesSuccessfully() {
+
+    }
+
+    @Override
+    public void onPushUserPreferencesTargetNotFound() {
+
+    }
+
+    @Override
+    public void onPushUserPreferencesBrowsingTimeAndClickTimeInvalid() {
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onActivitiesRefreshSuccessfully(List<Activity> respondActivities) {
+        addActivitiesToRecyclerView(respondActivities);
+        setupRecyclerView(activities);
+        progressBar.setVisibility(View.GONE);
+        swipeRefreshLayout.setRefreshing(false);
+        myAdapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(positionByUserStay == 0 ? 0 : positionByUserStay - 2);
+    }
+
+    private void addActivitiesToRecyclerView(List<Activity> respondActivities) {
+        for (Activity activity : respondActivities)
+            if (!activities.contains(activity))
+                activities.add(activity);
+    }
+
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         private List<Activity> activities;
+        private ActivityFragmentPresenter activityFragmentPresenter;
+        private User user;
 
-        public MyAdapter(List<Activity> activities) {
+        MyAdapter(List<Activity> activities, ActivityFragmentPresenter activityFragmentPresenter, User user) {
             this.activities = activities;
+            this.activityFragmentPresenter = activityFragmentPresenter;
+            this.user = user;
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             @BindView(R.id.activityTitleTxt)
             TextView titleTxt;
             @BindView(R.id.activityCategoryTxt)
@@ -153,10 +261,21 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
             TextView joinedOrNotTxt;
             @BindView(R.id.turnToWebSiteBtn)
             Button turnToWebSiteBtn;
+            @BindView(R.id.joinOrNotCKB)
+            CheckBox joinedOrNotCKB;
+            @BindView(R.id.interestingWaitingProgressbar)
+            ProgressBar interestingWaitingProgressBar;
+            private EventHandler eventHandler = new EventHandler();
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
+                itemView.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                eventHandler.cardViewOnClick(v);
             }
         }
 
@@ -166,40 +285,102 @@ public class ActivitiesFragment extends Fragment implements SwipeRefreshLayout.O
             return new MyAdapter.ViewHolder(v);
         }
 
-        //TODO imgBtn change
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Log.d("ViewHolder: ", "第" + position + "筆資料");
-            boolean interesting = false;
             Activity activity = activities.get(position);
-            holder.titleTxt.setText(activity.getTitle());
-            holder.categoryTxt.setText(activity.getTags());
-            holder.dateTxt.setText(activity.getStartDate() == null ? "" : activity.getStartDate() + " ~ " + activity.getEndDate());
-            holder.previewTxt.setText(activity.getContent());
-            holder.interestedOrNotImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ImageButton imageButton = view.findViewById(R.id.interestingOrNotImg);
-                    imageButton.setImageResource(R.drawable.interested);
+            User user = this.user;
 
-                }
-            });
-            holder.joinedOrNotTxt.setText("未參加");
-            holder.turnToWebSiteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Uri uri = Uri.parse(activity.getLink());
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
-                }
-            });
+            holder.titleTxt.setText(activity.getTitle());
+            holder.categoryTxt.setText("");
+            holder.dateTxt.setText(activity.getStartDate() == null ? "" : activity.getStartDate().substring(0, 10) + " ~ " + activity.getEndDate().substring(0, 10));
+            holder.previewTxt.setText(activity.getContent().trim());
+            holder.turnToWebSiteBtn.setText(activity.getSource());
+            holder.turnToWebSiteBtn.setOnClickListener(view -> turnToWebsiteByClickBtn(activity));
+            if (associationsMap.containsKey(activity.getId())) {
+                UserAssociation associationMap = associationsMap.get(activity.getId());
+                holder.joinedOrNotCKB.setChecked(associationMap.isJoin());
+                holder.joinedOrNotTxt.setText(associationMap.isJoin() ? getString(R.string.joined) : getString(R.string.notJoined));
+                holder.interestingWaitingProgressBar.setVisibility(View.GONE);
+                holder.interestedOrNotImg.setVisibility(View.VISIBLE);
+                holder.joinedOrNotCKB.setVisibility(View.VISIBLE);
+                holder.joinedOrNotTxt.setVisibility(View.VISIBLE);
+                holder.interestedOrNotImg.setOnClickListener(view -> pushPerformOrCancelActionOnActivityByClickInterestedOrNotImgBtn(view, associationMap, user, activity));
+                holder.joinedOrNotCKB.setOnClickListener(view -> createDialogForJoinOrCancelTheActivity(holder, associationMap, user, activity));
+                holder.interestedOrNotImg.setImageResource(associationMap.isLike() ? R.drawable.interested : R.drawable.not_interested);
+                holder.interestingWaitingProgressBar.setVisibility(View.GONE);
+            } else {
+                holder.joinedOrNotTxt.setText(getString(R.string.notJoined));
+                holder.interestedOrNotImg.setVisibility(View.INVISIBLE);
+                holder.joinedOrNotCKB.setVisibility(View.INVISIBLE);
+                holder.joinedOrNotTxt.setVisibility(View.INVISIBLE);
+                holder.interestingWaitingProgressBar.setVisibility(View.VISIBLE);
+                holder.joinedOrNotCKB.setOnClickListener(null);
+                holder.interestedOrNotImg.setOnClickListener(null);
+            }
+        }
+
+        private void turnToWebsiteByClickBtn(Activity activity) {
+            Uri uri = Uri.parse(activity.getLink());
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        }
+
+        private void pushPerformOrCancelActionOnActivityByClickInterestedOrNotImgBtn(View view, UserAssociation associationMap, User user, Activity activity) {
+            ImageButton imageButton = view.findViewById(R.id.interestingOrNotImg);
+            activityFragmentPresenter.performOrCancelActionOnActivity(user.getId(), activity.getId(), "like", !associationMap.isLike());
+            imageButton.setImageResource(associationMap.isLike() ? R.drawable.not_interested : R.drawable.interested);
+            associationMap.setLike(!associationMap.isLike());
+        }
+
+        private void createDialogForJoinOrCancelTheActivity(ViewHolder holder, UserAssociation associationMap, User user, Activity activity) {
+            new AlertDialog.Builder(getContext())
+                    .setMessage(associationMap.isJoin() ? getString(R.string.sureAboutCancelThisActivityAction) : getString(R.string.sureAboutJoinThisActivityAction))
+                    .setPositiveButton("是", (dialog, which) -> {
+                        activityFragmentPresenter.performOrCancelActionOnActivity(user.getId(), activity.getId(), "join", !associationMap.isJoin());
+//                        holder.joinedOrNotTxt.setText(!associationMap.isJoin() ? R.string.joined : R.string.notJoined);
+//                        holder.joinedOrNotCKB.setChecked(!associationMap.isJoin());
+                        if (dataKey == DataKey.JoinActivities) {
+                            activities.remove(activity);
+                            notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton("取消", (dialog, which) -> {
+                        dialog.dismiss();
+                        holder.joinedOrNotCKB.setChecked(associationMap.isJoin());
+                    })
+                    .show();
         }
 
         @Override
         public int getItemCount() {
             return activities.size();
         }
+
+        public class EventHandler {
+
+            public void cardViewOnClick(View view) {
+                TextView contentTxt = view.findViewById(R.id.activityPreviewTxt);
+                scaleCardViewToFitWholeContent(contentTxt);
+            }
+
+            private void scaleCardViewToFitWholeContent(final TextView contentTxt) {
+                final int startHeight = contentTxt.getHeight();
+                contentTxt.setMaxLines(Integer.MAX_VALUE); //show whole content
+
+                int widthSpec = View.MeasureSpec.makeMeasureSpec(contentTxt.getWidth(), View.MeasureSpec.EXACTLY);
+                int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                contentTxt.measure(widthSpec, heightSpec);
+
+                int targetHeight = contentTxt.getMeasuredHeight();
+
+                Animation animation = new TargetHeightAnimation(contentTxt, startHeight, targetHeight, true);
+                animation.setDuration(600);
+                contentTxt.startAnimation(animation);
+            }
+        }
     }
+
 
     @Override
     public void onAttach(Context context) {

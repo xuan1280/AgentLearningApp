@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="5.0dp"
     android:layout_margin="5dp"
-    card_view:cardElevation="10dp"
-    card_view:cardBackgroundColor="#d9d7d7">
+    card_view:cardBackgroundColor="#d9d7d7"
+    card_view:cardCornerRadius="5.0dp"
+    card_view:cardElevation="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="7dp"
+        android:background="@drawable/activity_card_background"
         android:gravity="center"
-        android:background="@drawable/activity_card_background">
+        android:orientation="vertical"
+        android:padding="7dp">
 
         <TextView
             android:id="@+id/activityTitleTxt"
@@ -38,9 +38,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:maxLength="2"
                 android:text="藝文類"
-                android:textSize="15sp"
-                android:maxLength="2"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/activityDateTxt"
@@ -61,40 +61,69 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:ellipsize="end"
+            android:maxLines="5"
             android:padding="3dp"
             android:text="新爽古典樂不再遙不可及! 【巴赫納莉亞台灣室內樂團】自創團" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="3dp">
+
+            <ProgressBar
+                android:id="@+id/interestingWaitingProgressbar"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
 
             <ImageButton
                 android:id="@+id/interestingOrNotImg"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/not_interested"
                 android:background="#00000000"
-                android:onClick="changeMindAboutActivityBtn"/>
+                android:src="@drawable/not_interested" />
 
             <TextView
                 android:id="@+id/joinOrNotTxt"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="以參加"
-                android:paddingStart="5dp"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@id/interestingOrNotImg"
+                android:layout_toRightOf="@id/interestingOrNotImg"
                 android:gravity="center"
-                android:paddingLeft="5dp" />
+                android:paddingEnd="2dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="2dp"
+                android:paddingStart="10dp"
+                android:text="以參加"
+                android:textSize="15sp"/>
+
+            <CheckBox
+                android:id="@+id/joinOrNotCKB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_toEndOf="@+id/joinOrNotTxt"
+                android:layout_toRightOf="@+id/joinOrNotTxt"
+                android:paddingEnd="5dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="5dp"
+                android:paddingStart="3dp" />
 
             <Button
                 android:id="@+id/turnToWebSiteBtn"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_toEndOf="@id/joinOrNotCKB"
+                android:layout_toRightOf="@id/joinOrNotCKB"
                 android:background="#00000000"
                 android:gravity="end|center_vertical"
+                android:textSize="16.5sp"
+                android:textStyle="bold"
                 android:text="全國藝文活動資訊網" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

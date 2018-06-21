@@ -9,6 +9,12 @@
     android:orientation="vertical"
     tools:context="com.ood.clean.waterball.agentlearningapp.views.activity.MainActivity">
 
+    <ImageView
+        android:id="@+id/logoImg"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ear"/>
+    
     <TextView
         android:id="@+id/appNameTxt"
         android:layout_width="wrap_content"
@@ -84,5 +90,11 @@
         android:onClick="onLoginBtnClick"
         android:text="@string/login" />
 
-
+    <ProgressBar
+        android:id="@+id/signInProgressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
 </LinearLayout>

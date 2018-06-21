@@ -1,7 +1,9 @@
 package com.ood.clean.waterball.agentlearningapp.modles.entities;
 
+import java.util.List;
+
 public class Activity extends Entitiy{
-    private String tags;
+    private List<ActivityTags> ActivityTags;
     private String title;
     private String startDate;
     private String endDate;
@@ -11,9 +13,9 @@ public class Activity extends Entitiy{
     private String address;
     private String contact;
 
-    public Activity(int id, String tags, String title, String startDate, String endDate, String content, String source, String link, String address, String contact) {
+    public Activity(int id, List<ActivityTags> ActivityTags, String title, String startDate, String endDate, String content, String source, String link, String address, String contact) {
         this.id = id;
-        this.tags = tags;
+        this.ActivityTags = ActivityTags;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -24,12 +26,12 @@ public class Activity extends Entitiy{
         this.contact = contact;
     }
 
-    public String getTags() {
-        return tags;
+    public List<ActivityTags> getActivityTags() {
+        return ActivityTags;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setTags (List<ActivityTags> ActivityTags) {
+        this.ActivityTags = ActivityTags;
     }
 
     public String getTitle() {

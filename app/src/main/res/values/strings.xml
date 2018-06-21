@@ -32,11 +32,15 @@
     <string name="closeDrawer">關閉</string>
     <string name="about">關於</string>
     <string name="logout">登出</string>
+    <string name="joined">已參加</string>
+    <string name="notJoined">未參加</string>
+    <string name="sureAboutCancelThisActivityAction">確定要取消參加此活動?</string>
+    <string name="sureAboutJoinThisActivityAction">確定要參加此活動?</string>
 
 
     <string-array name="activityOptions">
-        <item>已參加活動</item>
         <item>最新消息</item>
+        <item>已參加活動</item>
         <item>推薦消息</item>
     </string-array>
 
